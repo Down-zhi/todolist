@@ -13,14 +13,55 @@
             text-align: center;
             font-weight: 100;
         }
+        .buts{
+            margin-left: 60px;
+            width: 81%;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .button{
+               width: 100px;
+               height: 30px;
+               border: 1px solid black;
+                margin-right: 120px;
+        }
+        .button3{
+            width: 100px;
+            height: 30px;
+            border: 1px solid black;
+            float: right;
+        }
+        .button:hover{
+            text-decoration: underline;
+            
+        }
+        .button3:hover{
+            text-decoration: underline;
+        }
+        #editForm{
+            margin-left: -33px;
+            display: flex;
+            width: 60%;
+            text-align: center;
+            height: 40px;
+            font-size:large;
+            position: relative;
+        }
+        #editForm button{
+        display: inline;
+        }
         .todo-input {
             margin-left: 60px;
             display: flex;
             width: 80%;
             text-align: center;
             height: 60px;
-          
+            font-size:large;
        
+        }
+        .todo-input:hover{
+            color: white;
+            background-color:#ccc;
         }
         .todo-button {
             margin-left: 60px;
@@ -32,9 +73,59 @@
             cursor: pointer;
       
         }
+        .todo-button:hover{
+            size: 105%;
+        }
         .todo-list {
             list-style-type: none;
             padding: 0;
+        }
+        .todo-li{
+            top: 0;
+            border-top: 1px solid #e5e5e5;
+            font-size: large;
+            margin-left: 60px;
+            padding: 5px 10px;
+            width: 78%;
+            height: 30px;
+            position: relative;
+            background-color: white;
+
+        }
+        .completed{
+            color: #b6b6b6;
+            text-decoration: line-through;
+        }
+        .newinput{
+            position: absolute;
+            right: 240px;
+            width: 40px;
+        }
+        .edit{
+            position: absolute;
+             right: 110px;
+            bottom: 4px;
+             width: 80px;
+             height: 30px;
+             background-color:antiquewhite;
+             color: white;
+             border:1px solid white;
+             
+             
+        }
+        .delete{
+             position: absolute;
+             right: 20px;
+            bottom: 4px;
+             width: 80px;
+             height: 30px;
+             background-color: red;
+             color: white;
+             border:1px solid white;
+             background:url('https://img0.baidu.com/it/u=3892094652,2263697850&fm=253&fmt=auto&app=138&f=JPEG?w=450&h=315' );
+             
+             background-size:cover;
+             
         }
         .todo-item {
             padding: 5px;
