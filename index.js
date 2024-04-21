@@ -19,6 +19,11 @@ const addTodoDomToHtml = (title) => {
   todoListDom.appendChild(todoItemDom);
 };
 
+// 清楚 input
+const clearInput = () => {
+  document.getElementById("todo-input").value = "";
+};
+
 // 1、拉取数据,渲染数据
 const getTodosAndRender = () => {
   getTodos()
@@ -33,9 +38,28 @@ const getTodosAndRender = () => {
     });
 };
 
+// 2、添加 todo
+const addTodo = () => {
+  const title = (document.getElementById("todo-input").value || "").trim();
+  if (title !== "") {
+    createTodo({ title })
+      .then((res) => {
+        if (res.data && res.data.title) addTodoDomToHtml(res.data.title);
+        clearInput();
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  }
+};
+
 // 执行
 function main() {
+  // 初始化渲染
   getTodosAndRender();
+  // 事件添加
+  const addButton = document.getElementById("todo-button");
+  addButton.addEventListener("click", addTodoDomToHtml, false);
 }
 
 // 浏览器资源加载完成执行
