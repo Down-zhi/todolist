@@ -101,30 +101,40 @@
             right: 240px;
             width: 40px;
         }
+        .div{
+            top: 0;
+            border-top: 1px solid #e5e5e5;
+            font-size: large;
+            margin-left: 60px;
+            padding: 5px 10px;
+            width: 78%;
+            height: 30px;
+            position: relative;
+            display: block;
+          
+
+        }
         .edit{
-            position: absolute;
-             right: 110px;
-            bottom: 4px;
-             width: 80px;
+            width: 200px;
+            position:absolute;
+            left: 50px;
+         
              height: 30px;
-             background-color:antiquewhite;
-             color: white;
-             border:1px solid white;
+             background-color:white;
+             color: black;
+             border:1px solid black;
              
              
         }
         .delete{
-             position: absolute;
-             right: 20px;
-            bottom: 4px;
-             width: 80px;
+       position: absolute;
+       left: 300px;
+             width: 200px;
              height: 30px;
              background-color: red;
-             color: white;
-             border:1px solid white;
-             background:url('https://img0.baidu.com/it/u=3892094652,2263697850&fm=253&fmt=auto&app=138&f=JPEG?w=450&h=315' );
-             
-             background-size:cover;
+             color:black;
+             border:1px solid black
+           
              
         }
         .todo-item {

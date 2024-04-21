@@ -3,6 +3,7 @@ let input = document.getElementById('todo-input');
 let form = document.getElementById('input-form');
 let ul = document.getElementById('todo-list');
 let submit = document.getElementById('todo-button')
+const todoAPI = new TodoAPI('http://127.0.0.1:4000/todo');
 
 
 //读取操作 每此刷新都遍历一遍保存的li标签
@@ -33,21 +34,29 @@ function addTodo(todo) {
         if (todo && todo.completed) {
             li.classList.add('completed')     //完成给它加一个样式
         }
+        
         li.innerText = inputText
         li.classList.add('todo-li')
         ul.appendChild(li)            //把li添加到ul中
         update()
-
+        const div=document.createElement('div')
+        div.classList.add('div')
+        ul.appendChild(div)
+      
         //给li加一个按钮 
         const but = document.createElement('button');
         but.classList.add('delete')
-        li.appendChild(but)
+        div.appendChild(but)
+        but.innerHTML='Delete'
         //给li加一个编辑的按钮
         const edit = document.createElement('button');
         edit.classList.add('edit')
-        li.appendChild(edit)
+        div.appendChild(edit)
+        edit.innerHTML='Edit'
+        
         li.addEventListener('click', () => {
             li.classList.toggle('completed')//toggle 类名存在时删除它 不存在时添加它
+            div.classList.toggle('done')
             update()
         })
         but.addEventListener('click', () => {
@@ -59,15 +68,8 @@ function addTodo(todo) {
         let editForm = document.getElementById('editForm');
         let newTextInput = document.getElementById('newTextInput');
         edit.addEventListener('click', (e) => {
-            // const userinput=document.createElement('input');
-            // userinput.classList.add('newinput')
-            // const userText=document.getElementsByClassName('newinput').value;
-            // li.appendChild(userinput)
-            // userinput.addEventListener('click',(e)=>{
-            //     e.preventDefault;
-            //     li.innerText = userText;
-            // })
             e.preventDefault()
+      
             editForm.style.display = 'block';
             newTextInput.value=inputText
           
@@ -75,68 +77,18 @@ function addTodo(todo) {
                 event.preventDefault(); // 阻止表单默认提交行为
               
                 // 获取用户输入的新文本
-                var newText = newTextInput.value;//为什么未定义
-                console.log(newTextInput.value);
+                var newText = newTextInput.value;
                 // 更改原始文本内容
                li.innerHTML = newText;
-           //------------------------------------因为li的内容修改后没有两个编辑按钮了---------------------怎么改进      
-            
-                //给li加一个按钮 
-        const but = document.createElement('button');
-        but.classList.add('delete')
-        li.appendChild(but)
-        //给li加一个编辑的按钮
-        const edit = document.createElement('button');
-        edit.classList.add('edit')
-        li.appendChild(edit)
-        li.addEventListener('click', () => {
-            li.classList.toggle('completed')//toggle 类名存在时删除它 不存在时添加它
-            update()
-        })
-        but.addEventListener('click', () => {
-            li.remove()
-            update()
-        })
                 // 隐藏编辑表单
                 editForm.style.display = 'none';
                 update()
               });
            update()
         })
-        //编辑li中的文本
-
-    //     function edit() {
-    //         let todoText = document.querySelector('li')
-    //         const newText = prompt('请输入新的任务内容：', todoText.innerText);
-    //         if (newText !== null) {
-    //             todoText.innerText = newText;
-    //             update()
-    //         }
-    //     }
-    //     update()
     }
 
 }
-function editdelete(){
-   //给li加一个按钮 
-   const li = document.createElement('li');
-   const but = document.createElement('button');
-   but.classList.add('delete')
-   li.appendChild(but)
-   //给li加一个编辑的按钮
-   const edit = document.createElement('button');
-   edit.classList.add('edit')
-   li.appendChild(edit)
-   li.addEventListener('click', () => {
-       li.classList.toggle('completed')//toggle 类名存在时删除它 不存在时添加它
-       update()
-   })
-   but.addEventListener('click', () => {
-       li.remove()
-       update()
-   })
-}
-
 
 //用本地存储下来  在添加和删除li标签时都要执行一次
 function update() {
@@ -158,11 +110,20 @@ Active.addEventListener('click', Activetodo)
 
 function Activetodo() {
     let lis = document.querySelectorAll('li');
+    let  divs=document.querySelectorAll('.div')
+   divs.forEach(divs=>{
+    if(divs.classList.contains('done')){
+        divs.style.display='none'
+    }else{
+        divs.style.display='block'
+    }
+   })
     lis.forEach(lis => {
         if (lis.classList.contains('completed')) {
             lis.style.display = 'none';
         } else {
             lis.style.display = 'block';
+
         }
     })
 }
@@ -171,12 +132,23 @@ function Activetodo() {
 completed.addEventListener('click', completedtodo)
 function completedtodo() {
     let lis = document.querySelectorAll('li');
+    let  divs=document.querySelectorAll('.div')
+    divs.forEach(divs=>{
+     if(divs.classList.contains('done')){
+        divs.style.display='block'
+     }else{
+         divs.style.display='none'
+         
+     }
+    })
+
     lis.forEach(lis => {
         if (lis.classList.contains('completed')) {
 
             lis.style.display = 'block';
         } else {
             lis.style.display = 'none';
+           
         }
     })
 }
@@ -185,4 +157,68 @@ const reset = document.getElementById('reset');
 reset.addEventListener('click', () => {
     location.reload()
 })
+
+
+// function posttodo(todo){
+//     const data=`title:${todo}`
+//     fetch('http://127.0.0.1:4000/todo',{method:'POST', headers: {
+//             'Content-Type': 'application/json'},body:JSON.stringify(data) })
+//            .then(res=>{
+//             return res.json();
+//            })
+//            .then(res=>{
+//             console.log(res.data);
+//            })
+// }
+
+class TodoAPI {
+
+    async addTodoItem(todoText) {
+
+           await fetch('http://127.0.0.1:4000/todo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }, body: JSON.stringify({ text: todoText })
+            })
+          .then(res=>{
+                    return res.json();
+                   })
+                   .then(res=>{
+                    console.log(res.data);
+                   })
+        }
+    
+
+    async deleteTodoItem(todo){
+      await fetch(`http://127.0.0.1:4000/todo/${id}`,{method:'DELETE'})
+
+.then(res=>
+res.json())
+.then(res=>console.log('delete------->',res.message))
+    }
+
+    async updateTodoItem(todoId, newText) {
+         await fetch(`http://127.0.0.1:4000/todo/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: newText })
+            }).then(res=>
+                res.json())
+                .then(res=>console.log('delete------->',res.message))
+      
+    }
+
+    async getTodoItems() {
+        fetch('http://127.0.0.1:4000/todo', { mode: "cors" })
+           .then((res) => res.json()).
+           then(res => { console.log(res.data); return res })
+           .then((res) => console.log('------>', res, JSON.stringify(res, null, 2)))
+    }
+
+}
+
+
 

@@ -33,7 +33,59 @@
         </form>
     </div>
 
-    
+    <script>
+    //    fetch('http://127.0.0.1:4000/todo', { mode: "cors" })
+    //    .then((res) => res.json()).
+    //    then(res => { console.log(res.data); return res })
+    //    .then((res) => console.log('------>', res, JSON.stringify(res, null, 2)))
+  
+    //接收json数据      默认get方法
+//     fetch('http://127.0.0.1:4000/todo')
+//   .then(response => {
+//     if (!response.ok) {
+//       throw new Error('Network response was not ok');
+//     }
+//     return response.json();
+//   })
+//   .then(res=> {
+//     console.log(res.data);// 在这里使用接收到的 JSON 数据 //纯文本数据的话 return res.text()
+//   })
+//   .catch(error => {
+//     console.error('Error:', error);
+//   });
+  
+
+//    fetch('http://127.0.0.1:4000/todo')
+//    .then(res=>{
+//     return res.json();
+//    })
+//    .then(res=>{
+   
+//    res.data.forEach(item => {  //取id
+//     console.log(item.id);
+//    });
+//    let title=res.data.map(item=>item.title)//只取data数据的title
+//     console.log(title);
+//    })
+
+
+   //post方法
+//    const data = { title: '吃中午饭' };
+//    fetch('http://127.0.0.1:4000/todo',{method:'POST', headers: {
+//     'Content-Type': 'application/json'},body:JSON.stringify(data) })
+//    .then(res=>{
+//     return res.json();
+//    })
+//    .then(res=>{
+//     console.log(res.data);
+//    })
+
+// fetch(`http://127.0.0.1:4000/todo/${id}`,{method:'DELETE'})
+
+// .then(res=>
+// res.json())
+// .then(res=>console.log('delete------->',res.message))
+    </script>
 
 </body>
 <script src="./todo.js"></script>

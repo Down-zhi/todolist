@@ -17,5 +17,31 @@
         </form>
       </div>
 </body>
-<script src="./edit.js"></script>
+<script src="./edit.js">
+  // let payload=JSON.stringify({
+  //   foo:'bar'
+  // });
+  // let  jsonHeaders =new Headers({
+  //   'Content-type':'application/json'
+  // });
+  // fetch('./send-me-json',{
+  //   method:'post',
+  // body:payload,
+  // Headers:jsonHeaders})
+
+  fetch('http://127.0.0.1:4000/todo')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log(data);
+    // 在这里使用接收到的 JSON 数据
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+</script>
 </html>
