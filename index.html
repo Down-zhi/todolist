@@ -1,9 +1,9 @@
-ml<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./todo.css" />
+    <link rel="stylesheet" href="./index.css" />
     <title>Todo List</title>
     <style>
       /* 添加基本样式，如需要可以替换为链接到外部CSS文件 */
@@ -14,16 +14,12 @@ ml<!DOCTYPE html>
     <div class="todo-container">
       <h1>Todolist</h1>
       <h2>What needs to be done ?</h2>
-      <div class="buts">
-        <button id="reset" class="button">All</button>
-        <button id="active" class="button">Active</button>
-        <button id="Completed" class="button3">Completed</button>
-      </div>
+     
       <form id="editForm" style="display: none">
         <input type="text" id="newTextInput" placeholder="请输入新的文本" />
         <button type="submit">保存</button>
       </form>
-      <form id="input-form">
+      <!-- <form id="input-form"> -->
         <input
           type="text"
           id="todo-input"
@@ -31,8 +27,15 @@ ml<!DOCTYPE html>
           placeholder="Add a task"
         />
         <br />
-        <button id="todo-button" class="todo-button">Add</button>
-      </form>
+       
+      <!-- </form> -->
+      <button id="todo-button" class="todo-button">Add</button>
+      <div class="buts">
+        <button id="reset" class="button">All</button>
+        <button id="active" class="button">Active</button>
+        <button id="Completed" class="button3">Completed</button>
+      </div>
+      <h2 id="remain"></h2>
       <ul id="todo-list" class="todo-list">
         <!-- <li class="todo-item"></li> -->
       </ul>
