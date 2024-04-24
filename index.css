@@ -1,285 +1,227 @@
- body {
-     background-color: #f2eded;
+ body{
+    background-color: #f2eded;
  }
-
  .todo-container {
-     height: fit-content;
-     width: 680px;
-     height: fit-content;
-     margin-top: 0px;
-     margin: 0 auto;
-     background-color: white;
- }
+        height: fit-content;
+           width: 680px;
+           height: fit-content;
+           margin-top: 0px;
+            margin: 0 auto;
+            background-color:white;
+        }
+        h1{
+            text-align: center;
+            font-size: 50px;
+        }
+        h2{
+            text-align: center;
+            font-weight: 100;
+        }
+        .buts{
+            margin-top: 10px;
+            margin-left: 60px;
+            width: 81%;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .button{
+               margin-left: 40px;
+               width: 120px;
+               height: 38px;
+               border: 1px solid black;
+                margin-right: 20px;
+                border-color: rgb(211, 211, 211);
+                border-width: 1px;
+                border-color: white;
+        }
+        .button3{
+            width: 120px;
+            height: 38px;
+            border: 1px solid black;
+            float: right;
+            margin-right: 40px;
+            border-color: rgb(211, 211, 211);
+            border-width: 1px;
+            border-color: white;
+        }
+        .button:hover{
+            text-decoration: underline;
+            
+        }
+        .button3:hover{
+            text-decoration: underline;
+        }
+        #editForm{
+            margin-left: -33px;
+            display: flex;
+            width: 60%;
+            text-align: center;
+            height: 40px;
+            font-size:large;
+            position: relative;
+        }
+        #editForm button{
+        display: inline;
+        }
+        .todo-input {
+            margin-left: 60px;
+            display: flex;
+            width: 80%;
+            text-align: center;
+            height: 70px;
+            font-size:large;
+            border: 2px solid black;
+       
+        }
+        .todo-input:focus{
+           border:2px solid black;
+           outline: 4px dotted blue;
+        }
+        .todo-button {
+            margin-left: 60px;
+            padding: 5px 10px;
+            background-color: black;
+            color: white;
+            width: 81%;
+            height: 45px;
+            cursor: pointer;
+            font-size: 2.0rem;
+      
+        }
+        .todo-button:hover{
+            size: 105%;
+        }
+        .remain{    margin-left: auto;
+            margin-right: auto;
+            max-width: 50rem;
+        font-size: 1.5rem;}
+        .todo-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .todo-li{
+            top: 0;
+            border-top: 1px solid #e5e5e5;
+            font-size: large;
+            margin-left: 60px;
+            padding: 5px 10px;
+            width: 78%;
+            height: 84px;
+            position: relative;
+            background-color: white;
 
- h1 {
-     text-align: center;
-     font-size: 50px;
- }
+        }
+        span{
+        position: absolute;
+        top:15px
+           
+          
+        }
+        .span{
+            position: absolute;
+            left: 70px;
+        }
+        .completed{
+            color: green;
+            cursor: pointer;
+            margin: 0 auto;
+            position: relative;
+            
+        }
+        .completed::after{
+            content: "✔" ;
+            
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        .newinput{
+            position: absolute;
+            right: 240px;
+            width: 40px;
+        }
+        .div1{
+            width: 44px;
+            height: 44px;
+            margin-right: 16px;
+            display: inline-block;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        .div2{
+            top: 0;
+          
+            font-size: large;
+            margin-left: 60px;
+            padding: 5px 10px;
+            width: 78%;
+            height: 30px;
+            position: relative;
+            display: block;
+          
 
- h2 {
-     text-align: center;
-     font-weight: 100;
- }
-
- .buts {
-     margin-top: 10px;
-     margin-left: 60px;
-     width: 81%;
-     margin-bottom: 10px;
-     cursor: pointer;
- }
-
- .button {
-     margin-left: 48px;
-     width: 150px;
-     height: 38px;
-     border: 2px solid black;
-     margin-right: 10px;
-     border-color: rgb(211, 211, 211);
-     border-width: 2px;
-     letter-spacing: 1px;
-     font-size: larger;
- }
-
- .button2 {
-     width: 150px;
-     height: 38px;
-     border: 2px solid black;
-     margin-right: 10px;
-     border-color: rgb(211, 211, 211);
-     border-width: 2px;
-     letter-spacing: 1px;
-     font-size: larger;
- }
-
- .button3 {
-     width: 150px;
-     height: 38px;
-     border: 2px solid black;
-     float: right;
-     margin-right: 20px;
-     border-color: rgb(211, 211, 211);
-     border-width: 2px;
-     letter-spacing: 1px;
-     font-size: larger;
-
- }
-
- .button:focus {
-     text-decoration: underline;
-
- }
-
- .button2:focus {
-     text-decoration: underline;
-
- }
-
- .button3:focus {
-     text-decoration: underline;
- }
-
- #editForm {
-     margin-left: -33px;
-     display: flex;
-     width: 70%;
-     text-align: center;
-     height: 40px;
-     font-size: large;
-     position: relative;
- }
-
- #editForm button {
-     display: inline;
- }
-
- .todo-input {
-     margin-left: 50px;
-     display: flex;
-     width: 85%;
-     text-align: center;
-     height: 70px;
-     font-size: large;
-     border: 2px solid black;
-
- }
-
- .todo-input:focus {
-     border: 2px solid black;
-     outline: 4px dotted blue;
- }
-
- .todo-button {
-     margin-left: 50px;
-     padding: 5px 10px;
-     background-color: black;
-     color: white;
-     width: 86%;
-     height: 45px;
-     cursor: pointer;
-     font-size: 2.0rem;
-
- }
-
- .todo-button:hover {
-     size: 105%;
- }
-
- #remain {
-     margin-left: auto;
-     margin-right: auto;
-     max-width: 50rem;
-     font-size: 1.8rem;
-     font-weight: 400;
- }
-
- .todo-list {
-     list-style-type: none;
-     padding: 0;
- }
-
- .todo-li {
-     top: 0;
-
-     font-size: large;
-     margin-left: 60px;
-     padding: 5px 10px;
-     width: 78%;
-     height: 94px;
-     position: relative;
-     background-color: white;
-
-
- }
-
- span {
-     position: absolute;
-     top: 15px
- }
-
- .span {
-     position: absolute;
-     left: 70px;
- }
-
- .completed {
-     color: green;
-     cursor: pointer;
-     margin: 0 auto;
-     position: relative;
-
- }
-
- .completed::after {
-     content: "✔";
-
-     position: absolute;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
- }
-
- .newinput {
-     position: absolute;
-     right: 240px;
-     width: 40px;
- }
-
- .div1 {
-     margin-left: 40px;
-     width: 44px;
-     height: 44px;
-     margin-right: 16px;
-     display: inline-block;
-     border: 1px solid black;
-     cursor: pointer;
- }
-
- .div2 {
-     top: 0;
-
-     font-size: large;
-     margin-left: 60px;
-     padding: 5px 10px;
-     width: 78%;
-     height: 30px;
-     position: relative;
-     display: block;
-
-
- }
-
- .edit {
-     width: 240px;
-     position: absolute;
-     left: 50px;
-     top: 63px;
-     height: 40px;
-     background-color: white;
-     color: black;
-     border: 2px solid black;
-
-
- }
-
- .edit-input {
-     position: relative;
-     top: -88px;
-     left: 40px;
-     width: 95%;
-     text-align: center;
-     height: 40px;
-     font-size: large;
-     border: 2px solid black;
- }
-
- .edit-input:focus {
-     border: 2px solid black;
-     outline: 4px dotted blue;
- }
-
- .cancel {
-     width: 240px;
-     position: absolute;
-     left: 50px;
-     top: 60px;
-     height: 40px;
-     background-color: white;
-     color: black;
-     border: 1px solid black;
- }
-
- .save {
-     position: absolute;
-     top: 60px;
-     left: 320px;
-     background-color: black;
-     color: white;
-     width: 240px;
-     height: 40px;
- }
-
- .delete {
-     position: absolute;
-     left: 250px;
-     width: 240px;
-     height: 40px;
-     background-color: #ca3c3c;
-     color: #fff;
-     border: 1px solid #ca3c3c;
-
-
- }
-
- .todo-item {
-     padding: 5px;
-     border-bottom: 1px solid #ccc;
- }
-
- .todo-item button {
-     float: right;
-     margin-left: 5px;
-     background-color: transparent;
-     border: none;
-     cursor: pointer;
- }
+        }
+        .edit{
+            width: 200px;
+            position:absolute;
+            left: 50px;
+            top:63px;
+             height: 30px;
+             background-color:white;
+             color: black;
+             border:1px solid black;
+             
+             
+        }
+        .edit-input{
+            position: relative;
+            top: -10px;
+            width: 60%;
+            text-align: center;
+            height: 40px;
+            font-size:large;
+            border: 2px solid black;
+        }
+        .edit-input:focus{
+            border:2px solid black;
+            outline: 4px dotted blue;
+        }
+        .cancel{
+            width: 200px;
+            position:absolute;
+            left: 50px;
+            top:60px;
+             height: 30px;
+             background-color:white;
+             color: black;
+             border:1px solid black;
+        }
+        .save{
+            position: absolute;
+            top:60px;
+            left:320px;
+            background-color:black;
+            color: white;
+            width: 200px;
+            height: 30px;
+        }
+        .delete{
+       position: absolute;
+         left: 250px;
+             width: 200px;
+             height: 30px;
+             background-color: red;
+             color:white;
+        border: 1px solid red;
+           
+             
+        }
+        .todo-item {
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        .todo-item button {
+            float: right;
+            margin-left: 5px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
