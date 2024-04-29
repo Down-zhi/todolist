@@ -224,7 +224,7 @@ span {
 
 .edit-input {
     position: relative;
-    top: -88px;
+    /* top: -88px; */
     left: 40px;
     width: 95%;
     text-align: center;

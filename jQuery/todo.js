@@ -1,117 +1,155 @@
-//获取数据
 const getTodos = () => {
   return $.ajax({
-    url: "http://127.0.1:4000/todo",
-    method: "GET",
-    dataType: "json" 
+    url: "http://127.0.1:4000/todo", method: "GET", dataType: "json"
   });
 };
-// const getTodos = () => {
-//   return fetch("http://127.0.1:4000/todo", { method: "GET" }).then((res) =>
-//     res.json()
-//   );
-// };
- //增加
-//  const createTodo = (data) => {
-//   return fetch("http://127.0.1:4000/todo", {
-//     method: "POST",
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(data)
-//   }).then((res) =>
-//     res.json()
-//   );
-// }
-  const createTodo = (data) => {
-    return $.ajax({
-      url: "http://127.0.0.1:4000/todo",
-      type: "POST",
-      contentType: "application/json",
-      data: JSON.stringify(data),
-      dataType: "json"
+const createTodo = (data) => {
+  return $.ajax({
+    url: "http://127.0.0.1:4000/todo", type: "POST", contentType: "application/json", data: JSON.stringify(data), dataType: "json"
+  });
+};
+const deleteTodo = (id) => {
+  return $.ajax({
+    url: `http://127.0.0.1:4000/todo/${id}`, type: "DELETE", dataType: "json"
+  });
+};
+const updateTodo = (id, data) => {
+  return $.ajax({
+    url: `http://127.0.0.1:4000/todo/${id}`, type: "POST", contentType: "application/json", data: JSON.stringify(data), dataType: "json"
+  });
+};
+$(function () {
+  const renderList = (filteredTodos = []) => {
+    let allStr = '';
+    filteredTodos.forEach(item => {
+      let checked = item.status === 1 ? 'checked' : ''; 
+      allStr += `
+          <li class='todo-li' data-id='${item.id}' status='${item.status}'>
+            <input class='div1' type="checkbox" ${checked}>
+            <span>${item.title}</span>
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+          </li>`;
     });
+    $('#todo-list').html(allStr);
   };
-//删除
-  const deleteTodo = (id) => {
-    return $.ajax({
-      url: `http://127.0.0.1:4000/todo/${id}`,
-      type: "DELETE",
-      dataType: "json"
-    });
+  const toggleFilterClass = (selector, className) => {
+    $(selector).addClass(className);                    
   };
-  //更新
-  const updateTodo = (id, data) => {
-    return $.ajax({
-      url: `http://127.0.0.1:4000/todo/${id}`,
-      type: "POST",
-      contentType: "application/json",
-      data: JSON.stringify(data),
-      dataType: "json"
-    });
-  };
-$(function(){
-  //测试用例
-    let todolist=[
-        { title:'ikun',status:1},
-        { title:'ikun1',status:1},
-        { title:'ikun2',status:0},
-        { title:'ikun3',status:0}
-      ]
-     //加载数据
-     load()
-     function load(){
-     let allStr='';
-     let completedStr='';
-     let activeStr='';
-     getTodos()
-     .then(function(res){
+  const load = () => {
+    getTodos()
+      .then(res => {
         const todoDatas = res["data"] || [];
-       todoDatas.forEach(function(item){
-        let checked = item.status===1?'checked =ture':''
-        allStr+=` <li class='todo-li' data-id=${item.id} status=${item.status}>
-        <input class='div1' type="checkbox" ${checked}>
-        <span>${item.title}</span>
-        <div>
-          <button class="edit">Edit</button>
-          <button class="delete">Delete</button>
-        </div>
-      </li>`
-      $('#todo-list').html(allStr);
-    })
-     })
-    } 
-   
-      //添加数据
-     $('#todo-button').click(function(){
-      const title=$('#todo-input').val().trim();
-      console.log(title);
-      if(title){
-        createTodo({title :title}).then(function(){
-          // POST请求成功后的处理，例如清空输入框、刷新列表等
-          $('#todo-input').val('')         // 清空输入框
-          load();                          // 刷新待办事项列表
+        renderList(todoDatas);
+        let tasks = todoDatas.length > 1 ? 'tasks' : 'task'
+        let remain = `${todoDatas.length}${tasks}remaining`
+        $("#remain").html(remain)
       })
-      .catch(function(error){
+      .catch(error => console.error(error));
+  };
+ 
+  $('#todo-button').click(function () {
+    const title = $('#todo-input').val().trim();
+    console.log(title);
+    if (title) {
+      createTodo({ title: title }).then(function () {
+        // POST请求成功后的处理，例如清空输入框、刷新列表等
+        $('#todo-input').val('')         // 清空输入框
+        load();                          // 刷新待办事项列表
+      })
+        .catch(function (error) {
           console.error("添加待办事项失败:", error);
-      });
-      }
-     })
-     load()
-      
-     //事件代理删除数据
-     $("#todo-list").on('click','button.delete',function(){    //click ()属于静态加载，当页面加载完，就不在为新增加的元素添加点击事件。 on ()属于动态加载，当页面加载完，可以为新增加的元素添加事件。
-        var i = $(this).parent().parent().index();  //parent取得父元素
-        if(todolist.length > 1 && i !== undefined) {
-            todolist.splice(i, 1);
-        } else if(todolist.length === 0) {
-            // 如果只剩一个元素，直接清空数组
-            $(this).parent().parent().remove()
-        }
-         load();
-        
-     })                                            
+        });
+    }
+  })
+  load()
+ 
+  $("#todo-list").on('click', 'button.delete', function () {
+    let id = $(this).closest('li').data('id')
+    deleteTodo(id).then((function () {
+      $(this).closest('li').remove()
+      load()
+    })).catch((error) => console.error(error.message));
+  })
+  load()
 
+  $('#todo-list').on('click', 'input.div1', function () {
+    let id = $(this).closest('li').data('id');
+    const newstatus = $(this).is(':checked') ? 1 : 0;
+    $(this).closest('li').attr('status', newstatus)
+    updateTodo(id, { status: newstatus })
+      .then(() => {
+        // 根据当前显示状态（active或completed）重新获取并渲染列表
+        if ($("#active").hasClass("active-filter")) {
+          $("#active").trigger("click");   // 重新加载active状态的任务
+        } else if ($("#Completed").hasClass("completed-filter")) {
+          $("#Completed").trigger("click"); // 重新加载completed状态的任务
+        } else {
+          load();                            // 全部状态则刷新整个列表
+        }
+      })
+  })
+ 
+  $("#todo-list").on('click', 'button.edit', function () {
+    let oldtext = $(this).prev('span').text()
+    let editinput = $(this).closest('li')
+    let editmodle = ` <input class="edit-input" type="text">
+  <button class="cancel">Cancel</button>
+  <button class="save">Save</button>`
+    $(this).closest('li').html(editmodle);          //直接用新标签覆盖之前的
+    $(editinput).find('input').val(`New name for ${oldtext}`)
+    $(editinput).find('input').focus(function () {
+      $(this).val('')
+    })
+    $('.cancel').click(function () {
+      load()
+    })
+    $('.save').click(function () {
+      let newtitle = $(editinput).find('input').val()
+      let id = $(this).closest('li').data('id');
+      updateTodo(id, { title: newtitle })
+      load()
+    })
+  })
+
+  $("#reset").click(function () {
+    $("#active").removeClass('active-filter')
+    $("#Completed").removeClass('completed-filter')
+    load()
+  })
+  $("#active").on('click', function () {
+    $("#Completed").removeClass('completed-filter')
+    toggleFilterClass('#active', 'active-filter');
+    getTodos()
+      .then(res => {
+        const todoDatas = res["data"] || [];
+        const activeTodos = todoDatas.filter(item => item.status === 0);
+        renderList(activeTodos);
+        let tasks = activeTodos > 1 ? 'tasks' : 'task'
+        let remain = `${activeTodos.length}${tasks}remaining`
+        $("#remain").html(remain)
+      })
+  })
+  $("#Completed").on('click', function () {
+    $("#active").removeClass('active-filter')
+    toggleFilterClass('#Completed', 'completed-filter');
+    getTodos()
+      .then(res => {
+        const todoDatas = res["data"] || [];
+        const completedTodos = todoDatas.filter(item => item.status === 1);
+        renderList(completedTodos);
+        let tasks = completedTodos > 1 ? 'tasks' : 'task'
+        let remain = `${completedTodos.length}${tasks}remaining`
+        $("#remain").html(remain)
+      })
+  })
 })
+
+
+
+
+
+
+
 
 
