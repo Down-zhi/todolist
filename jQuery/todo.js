@@ -53,7 +53,6 @@ $(function () {
     console.log(title);
     if (title) {
       createTodo({ title: title }).then(function () {
-        // POST请求成功后的处理，例如清空输入框、刷新列表等
         $('#todo-input').val('')         // 清空输入框
         load();                          // 刷新待办事项列表
       })
@@ -144,9 +143,6 @@ $(function () {
       })
   })
 })
-
-
-
 
 
 
