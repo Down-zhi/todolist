@@ -1,8 +1,14 @@
+window.onload = function () {
+  window.scrollTo(0, document.body.scrollHeight);
+};
 const getTodos = () => {
   return $.ajax({
     url: "http://127.0.1:4000/todo", method: "GET", dataType: "json"
   });
 };
+let currentPage = 1;
+const itemsPerPage = 4;
+
 const createTodo = (data) => {
   return $.ajax({
     url: "http://127.0.0.1:4000/todo", type: "POST", contentType: "application/json", data: JSON.stringify(data), dataType: "json"
@@ -18,36 +24,116 @@ const updateTodo = (id, data) => {
     url: `http://127.0.0.1:4000/todo/${id}`, type: "POST", contentType: "application/json", data: JSON.stringify(data), dataType: "json"
   });
 };
+document.documentElement.scrollIntoView({ block: 'end' });
+function renderPage(page, todoDatas) {
+  let startIndex = (page - 1) * itemsPerPage;
+  let endIndex = startIndex + itemsPerPage;
+  let pageData = todoDatas.slice(startIndex, endIndex);
+  const activeTodos = todoDatas.filter(item => item.status === 0);
+  let activeDate = activeTodos.slice(startIndex, endIndex);    //activetodo 截取四个
+  const completedTodos = todoDatas.filter(item => item.status === 1);
+  let completedDate = completedTodos.slice(startIndex, endIndex); //完成的截取
+  let allStr = '';
+  if ($("#active").hasClass("active-filter")) {
+    Data = activeDate
+  } else if ($("#Completed").hasClass("completed-filter")) {
+    Data = completedDate
+  } else {
+    Data = pageData
+  }
+  Data.forEach(item => {
+    let checked = item.status === 1 ? 'checked' : '';
+    allStr += `
+        <li class='todo-li' data-id='${item.id}' status='${item.status}'>
+          <input class='div1' type="checkbox" ${checked}>
+          <span>${item.title}</span>
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </li>`;
+  });
+  $('#todo-list').html(allStr);
+}
+
 $(function () {
-  const renderList = (filteredTodos = []) => {
-    let allStr = '';
-    filteredTodos.forEach(item => {
-      let checked = item.status === 1 ? 'checked' : ''; 
-      allStr += `
-          <li class='todo-li' data-id='${item.id}' status='${item.status}'>
-            <input class='div1' type="checkbox" ${checked}>
-            <span>${item.title}</span>
-            <button class="edit">Edit</button>
-            <button class="delete">Delete</button>
-          </li>`;
-    });
-    $('#todo-list').html(allStr);
-  };
   const toggleFilterClass = (selector, className) => {
-    $(selector).addClass(className);                    
+    $(selector).addClass(className);
   };
   const load = () => {
     getTodos()
       .then(res => {
         const todoDatas = res["data"] || [];
-        renderList(todoDatas);
-        let tasks = todoDatas.length > 1 ? 'tasks' : 'task'
-        let remain = `${todoDatas.length}${tasks}remaining`
+        renderPage(1, todoDatas);
+        let todoitems;
+        if ($("#active").hasClass("active-filter")) {
+          todoitems = todoDatas.filter(item => item.status === 0);
+        } else if ($("#Completed").hasClass("completed-filter")) {
+          todoitems = todoDatas.filter(item => item.status === 1);
+        } else {
+          todoitems = todoDatas
+        }
+        let tasks = todoitems.length > 1 ? 'tasks' : 'task'
+        let remain = `${todoitems.length} ${tasks} remaining`
         $("#remain").html(remain)
+        //分页功能
+        const nowpage = function (e) {
+          $('.page-btn').removeClass('active-page');
+          $(`.page-btn[data-page="${e}"]`).addClass('active-page');
+        }
+        // 计算总页数并创建分页按钮
+        const activeTodos = todoDatas.filter(item => item.status === 0);
+        const completedTodos = todoDatas.filter(item => item.status === 1);
+        let totalPages = 0;
+        if ($("#active").hasClass("active-filter")) {
+          totalPages = Math.ceil(activeTodos.length / itemsPerPage);
+          console.log(totalPages);
+        } else if ($("#Completed").hasClass("completed-filter")) {
+          totalPages = Math.ceil(completedTodos.length / itemsPerPage);
+          console.log(totalPages);
+        }
+        else {
+          totalPages = Math.ceil(todoDatas.length / itemsPerPage);
+        }
+        // 分页按钮点击事件
+        $('#pagination').on('click', '.page-btn', function () {
+          currentPage = parseInt($(this).data('page'));
+          nowpage(currentPage)
+          renderPage(currentPage, todoDatas);
+          console.log(currentPage);
+        });
+        $('.pre').click(function () {
+          if (currentPage > 1) {
+            currentPage--;
+          }
+          nowpage(currentPage)
+          renderPage(currentPage, todoDatas)
+          onload()
+        })
+        $('.next').on('click', function () {
+          if ($("#active").hasClass("active-filter")) {
+            totalPages = Math.ceil(activeTodos.length / itemsPerPage);
+          } else if ($("#Completed").hasClass("completed-filter")) {
+            totalPages = Math.ceil(completedTodos.length / itemsPerPage);
+          } else { totalPages = Math.ceil(todoDatas.length / itemsPerPage); }
+          if (currentPage < totalPages) {
+            currentPage++;
+          }
+          nowpage(currentPage)
+          renderPage(currentPage, todoDatas)
+          onload()
+        })
+        createPaginationButtons(totalPages);
+        $(`.page-btn[data-page="1"]`).addClass('active-page');
+        // 创建分页按钮
+        function createPaginationButtons(totalPages) {
+          let paginationHtml = '';
+          for (let i = 1; i <= totalPages; i++) {
+            paginationHtml += ` <button class="page-btn" data-page="${i}">${i}</button> `;
+          }
+          $('#pagination').html(paginationHtml);
+        }
       })
       .catch(error => console.error(error));
   };
- 
   $('#todo-button').click(function () {
     const title = $('#todo-input').val().trim();
     console.log(title);
@@ -61,8 +147,6 @@ $(function () {
         });
     }
   })
-  load()
- 
   $("#todo-list").on('click', 'button.delete', function () {
     let id = $(this).closest('li').data('id')
     deleteTodo(id).then((function () {
@@ -71,7 +155,6 @@ $(function () {
     })).catch((error) => console.error(error.message));
   })
   load()
-
   $('#todo-list').on('click', 'input.div1', function () {
     let id = $(this).closest('li').data('id');
     const newstatus = $(this).is(':checked') ? 1 : 0;
@@ -88,7 +171,7 @@ $(function () {
         }
       })
   })
- 
+
   $("#todo-list").on('click', 'button.edit', function () {
     let oldtext = $(this).prev('span').text()
     let editinput = $(this).closest('li')
@@ -122,11 +205,9 @@ $(function () {
     getTodos()
       .then(res => {
         const todoDatas = res["data"] || [];
-        const activeTodos = todoDatas.filter(item => item.status === 0);
-        renderList(activeTodos);
-        let tasks = activeTodos > 1 ? 'tasks' : 'task'
-        let remain = `${activeTodos.length}${tasks}remaining`
-        $("#remain").html(remain)
+        renderPage(currentPage, todoDatas);
+        load()
+
       })
   })
   $("#Completed").on('click', function () {
@@ -135,17 +216,25 @@ $(function () {
     getTodos()
       .then(res => {
         const todoDatas = res["data"] || [];
-        const completedTodos = todoDatas.filter(item => item.status === 1);
-        renderList(completedTodos);
-        let tasks = completedTodos > 1 ? 'tasks' : 'task'
-        let remain = `${completedTodos.length}${tasks}remaining`
-        $("#remain").html(remain)
+        renderPage(currentPage, todoDatas);
+        load()
+
       })
   })
+//   $(document).ready(function() {
+//     // 初始化加载动画
+//     $('#loading').loading({
+//         message: '加载中...', // 自定义加载提示文本
+//         dissmissOnComplete: false // 完成后是否自动消失
+//     });
+ 
+//     // 触发加载动画
+//     $('#loading').loading('start');
+ 
+//     // 模拟加载过程（例如：异步请求数据）
+//     setTimeout(function() {
+//         // 加载完成，停止加载动画
+//         $('#loading').loading('stop');
+//     }, 3000); // 假设加载时间为3秒
+// });
 })
-
-
-
-
-
-
