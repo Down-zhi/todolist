@@ -2,7 +2,7 @@ body {
   background-color: #f2eded;
 }
 
-.todo-container {
+#root{
   height: fit-content;
   width: 680px;
   height: fit-content;
