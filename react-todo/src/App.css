@@ -92,7 +92,6 @@ h2 {
 #editForm button {
   display: inline;
 }
-
 .todo-input {
   margin-left: 50px;
   display: flex;
@@ -103,12 +102,10 @@ h2 {
   border: 2px solid black;
 
 }
-
 .todo-input:focus {
   border: 2px solid black;
   outline: 4px dotted blue;
 }
-
 .todo-button {
   margin-left: 50px;
   padding: 5px 10px;
@@ -120,12 +117,11 @@ h2 {
   font-size: 2.0rem;
 
 }
-
 .todo-button:hover {
   size: 105%;
 }
 
-#remain {
+.remain {
   margin-left: auto;
   margin-right: auto;
   max-width: 50rem;
@@ -294,24 +290,24 @@ top: 62px;
 .page-btn{
   height: 30px;
   width: 30px;
+  display: inline;
 }
-.paging{
-  margin: auto;
-margin-left: 300px;
-  height: 30px;
- width: 30px;
- display: inline;
+.paging {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  gap: 1px;
+  flex-wrap: nowrap; 
 }
 .pre{
   height: 30px;
   width: 30px;
-  display: inline;
 
 }
 .next{
   height: 30px;
   width: 30px;
-  display: inline;
+  
 }
 /* #cisLoading {
 position: fixed;
