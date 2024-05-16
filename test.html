@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo List</title>
+</head>
+<body>
+    <h2>Todo List</h2>
+    <input type="text" id="new-task" placeholder="Add new task">
+    <button id="add-task">Add</button>
+    <ul id="tasks-list"></ul>
+ 
+    <script>
+        const tasksList = document.getElementById('tasks-list');
+        const addTaskBtn = document.getElementById('add-task');
+        const newTaskInput = document.getElementById('new-task');
+ 
+        // 获取所有任务
+        fetch("http://127.0.1:4000/todo")
+            .then(response => response.json())
+            .then(tasks => {
+                tasks.forEach(task => {
+                    const li = document.createElement('li');
+                    li.textContent = task.name;
+                    li.dataset.id = task.id;
+                    tasksList.appendChild(li);
+                });
+            });
+ 
+        // 添加任务
+        addTaskBtn.addEventListener('click', () => {
+            const name = newTaskInput.value;
+            if (name) {
+                fetch('http://127.0.1:4000/todo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                }).then(response => response.json())
+                  .then(task => {
+                      const li = document.createElement('li');
+                      li.textContent = task.name;
+                      li.dataset.id = task.id;
+                      tasksList.appendChild(li);
+                  });
+            }
+        });
+ 
+        // 更新任务
+        tasksList.addEventListener('click', (event) => {
+            if (event.target.tagName === 'LI') {
+                const id = event.target.dataset.id;
+                const name = event.target.textContent;
+                fetch(`http://127.0.1:4000/todo/${id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, name, completed: !event.target.classList.toggle('completed') })
+                }).then(response => response.json())
+                  .then(task => {
+                      event.target.textContent = task.name;
+                  });
+            }
+        });
+ 
+        // 删除任务
+        tasksList.addEventListener('click', (event) => {
+            if (event.target.tagName === 'BUTTON') {
+                const id = event.target.parentNode.dataset.id;
+                fetch(`http://127.0.1:4000/todo/${id}`, {
+                    method: 'DELETE'
+                }).then(() => {
+                    tasksList.removeChild(event.target.parentNode);
+                });
+            }
+        });
+         //5 修改li标签文本
+    const toggleEditMode = (todoItemDom) => {
+      const span = todoItemDom.querySelector('span');
+      const input = document.createElement('input');
+    
+      if (input.parentNode === todoItemDom) {
+        // Exiting edit mode
+        const newTitle = input.value.trim();
+    
+      return  updateTodo(id, { title: newTitle })
+          .then(() => updateTodoDomTitle(todoItemDom, newTitle))
+          .catch((error) => console.error(error.message));
+    
+      } else {
+        // Entering edit mode
+        span.style.display = 'none'; // Hide original text
+        input.type = 'text';
+        input.value = span.innerText;
+        input.classList.add('edit-input');
+        input.addEventListener('blur', () => toggleEditMode(todoItemDom)); // Handle blur to exit edit mode
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            toggleEditMode(todoItemDom); // Submit on Enter key press
+          }
+        });
+        todoItemDom.appendChild(input);
+        input.focus();
+      }
+    };
+      // jQuery通过创建类进行模拟增删改
+       let todolist=[
+        { title:'ikun',status:1},
+        { title:'ikun1',status:1},
+        { title:'ikun2',status:0},
+        { title:'ikun3',status:0}
+      ]
+     if(todolist){
+         todolist.forEach(function(data,i){
+            let checked = data.status===1?'checked =ture':''
+             allStr+=` <li class='todo-li'>
+             <input class='div1' type="checkbox" index=${i} ${checked}>
+             <span>${data.title}</span>
+             <div>
+               <button class="edit">Edit</button>
+               <button class="delete">Delete</button>
+             </div>
+           </li>`
+             if(data.status===1){
+                 completedStr+=` <li>
+                 <input type="checkbox" index=${i} checked='ture'>
+                 <span>${data.title}</span>
+                 <div>
+                   <button class="edit">Edit</button>
+                   <button class="delete">Delete</button>
+                 </div>
+               </li>`
+             }else{
+                activeStr+=` <li>
+                <input type="checkbox" index=${i} checked='ture'>
+                <span>${data.title}</span>
+                <div>
+                  <button class="edit">Edit</button>
+                  <button class="delete">Delete</button>
+                </div>
+              </li>`
+             }
+             $('#todo-list').html(allStr);
+         })
+     }
+      
+    </script>
+   
+   <script>
+    const getTodos = () => {
+  return $.ajax({
+    url: "http://127.0.1:4000/todo",method: "GET", dataType: "json" 
+  });
+};
+const createTodo = (data) => {
+    return $.ajax({
+      url: "http://127.0.0.1:4000/todo",type: "POST",contentType: "application/json",data: JSON.stringify(data),dataType: "json"
+    });
+  };
+ const deleteTodo = (id) => {
+    return $.ajax({
+      url: `http://127.0.0.1:4000/todo/${id}`,type: "DELETE",dataType: "json"
+    });
+  };
+  const updateTodo = (id, data) => {
+    return $.ajax({
+      url: `http://127.0.0.1:4000/todo/${id}`, type: "POST",contentType: "application/json",data: JSON.stringify(data),dataType: "json"
+    });
+  };
+$(function(){
+     //1.加载数据
+     load()
+     function load(){
+      let allStr='';   
+      getTodos()
+     .then(function(res){
+        const todoDatas = res["data"] || [];
+       todoDatas.forEach(function(item){
+        let checked = item.status===1?'checked =ture':''
+        allStr+=` <li class='todo-li' data-id=${item.id} status=${item.status}>
+          <input class='div1' type="checkbox" ${checked}>
+          <span>${item.title}</span>
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+      </li>`
+      $('#todo-list').html(allStr);
+    })
+     })
+    } 
+    
+      //2.添加数据
+     $('#todo-button').click(function(){
+      const title=$('#todo-input').val().trim();
+      console.log(title);
+      if(title){
+        createTodo({title :title}).then(function(){
+          // POST请求成功后的处理，例如清空输入框、刷新列表等
+          $('#todo-input').val('')         // 清空输入框
+          load();                          // 刷新待办事项列表
+      })
+      .catch(function(error){
+          console.error("添加待办事项失败:", error);
+      });
+      }
+     })
+     load()    
+     //3.事件代理删除数据
+     $("#todo-list").on('click','button.delete',function(){
+      let id=$(this).closest('li').data('id')
+      deleteTodo(id).then((function(){
+        $(this).closest('li').remove()
+        load()
+      })) .catch((error) => console.error(error.message));
+     })
+    load()
+    //4.复选框改变待办事项状态
+    $('#todo-list').on('click','input.div1',function(){
+      let id=$(this).closest('li').data('id');
+      const newstatus = $(this).is(':checked') ? 1 : 0;
+      $(this).closest('li').attr('status',newstatus)
+      updateTodo(id, {status: newstatus }).then((function(){
+        if (newstatus === 1) {
+          console.log(`Todo with ID ${id} is completed.`);
+          load()
+        }else{
+          console.log(`Todo with ID ${id} is activing.`);
+        }
+      })
+ ).catch((error) => console.error(error.message));  
+    })
+    //5，更新title
+ $("#todo-list").on('click','button.edit',function(){
+  let oldtext=$(this).prev('span').text()
+  let editinput=$(this).closest('li')
+  let editmodle=` <input class="edit-input" type="text">
+  <button class="cancel">Cancel</button>
+  <button class="save">Save</button>`
+  $(this).closest('li').html(editmodle);          //直接用新标签覆盖之前的
+  $(editinput).find('input').val(`New name for ${oldtext}`)
+  $(editinput).find('input').focus(function(){
+    $(this).val('')
+  })
+  $('.cancel').click(function(){
+    load()
+  })
+  $('.save').click(function(){
+   let newtitle= $(editinput).find('input').val()
+   let id=$(this).closest('li').data('id');
+    updateTodo(id,{title:newtitle})
+    load()
+  })
+})
+  //根据状态查询在做和完成的
+  $("#reset").click(function(){
+    load()
+  })
+  $("#active").on('click',function(){
+    let activeStr='';
+    getTodos()
+    .then(function(res){
+       const todoDatas = res["data"] || [];
+      todoDatas.forEach(function(item){
+        if(item.status===0){
+          let checked = item.status===1?'checked =ture':''
+          activeStr+=` <li class='todo-li' data-id=${item.id} status=${item.status}>
+          <input class='div1' type="checkbox" ${checked}>
+          <span>${item.title}</span>
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+        </li>`
+        $('#todo-list').html(activeStr);
+        $('.div1').click(function(){
+          load()
+        })
+        } 
+   })
+    })
+  
+    })
+    $("#Completed").on('click', function(){
+      let completedStr=''
+      getTodos()
+      .then(function(res){
+         const todoDatas = res["data"] || [];
+        todoDatas.forEach(function(item){
+          if(item.status===1){
+            let checked = item.status===1?'checked =ture':''
+            completedStr+=` <li class='todo-li' data-id=${item.id} status=${item.status}>
+            <input class='div1' type="checkbox" ${checked}>
+            <span>${item.title}</span>
+              <button class="edit">Edit</button>
+              <button class="delete">Delete</button>
+          </li>`
+          $('#todo-list').html(completedStr);
+          // load()
+          }
+     })
+      })
+    })
+})
+
+ 
+
+
+
+
+
+
+
+
+   </script>
+</body>
+</html>

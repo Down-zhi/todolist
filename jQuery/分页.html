@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+    <link rel="stylesheet" href="todo.css">
+    <style>
+ 
+    </style>
+</head>
+<body>
+    <ul id="todo-list"></ul>
+<div class="paging" style="display: inline;">
+    <button class="pre">< </button>
+    <div style="display: inline;" id="pagination"></div>
+    <button style="display: inline;" class="next">></button>
+</div>
+    <script>
+        $(function () {
+  // 模拟的待办事项数据
+            const todoItems = [
+                { id: 1, title: "JavaScript", status: 1 },
+                { id: 2, title: "jQuery", status: 0 },
+                { id: 3, title: "DOM ", status: 1 },
+                { id: 4, title: "Todo ", status: 0 },
+                { id: 5, title: "Debug", status: 1 },
+                { id: 6, title: "Promises", status: 0 },
+                { id: 7, title: "AJAX ", status: 1 },
+                { id: 8, title: "HTMl", status: 0 },
+                { id: 9, title: "code", status: 1 },
+                { id: 10, title: "project", status: 0 },
+                { id: 11, title: "1", status: 0 },
+                { id: 12, title: "2", status: 0 },
+                { id: 13, title: "3", status: 0 }
+            ];
+
+  // 分页相关变量
+  let currentPage = 1;
+  const itemsPerPage = 5;
+
+  // 渲染指定页的数据
+  function renderPage(page) {
+    let startIndex = (page - 1) * itemsPerPage;
+    let endIndex = startIndex + itemsPerPage;
+    let pageData = todoItems.slice(startIndex, endIndex);
+    let allStr = '';
+    pageData.forEach(item => {
+      let checked = item.status === 1 ? 'checked' : ''; 
+      allStr += `
+          <li class='todo-li' data-id='${item.id}' status='${item.status}'>
+            <input class='div1' type="checkbox" ${checked}>
+            <span>${item.title}</span>
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+          </li>`;
+    });
+    $('#todo-list').html(allStr);
+  }
+
+  // 初始化第一页
+  renderPage(currentPage);
+
+const nowpage=function(e){
+  $('.page-btn').removeClass('active-page');
+  $(`.page-btn[data-page="${e}"]`).addClass('active-page');
+}
+  // 分页按钮点击事件
+  $('#pagination').on('click', '.page-btn', function () {
+    currentPage = parseInt($(this).data('page'));
+    nowpage(currentPage)
+    renderPage(currentPage);
+  });
+  $('.pre').click(function(){
+    if(currentPage>1){
+        currentPage--;
+    }
+    nowpage(currentPage)
+    renderPage(currentPage)
+    })
+  $('.next').on ('click', function(){
+    if(currentPage<Number(totalPages) ){
+        currentPage++; 
+    }
+    nowpage(currentPage)
+    renderPage(currentPage)
+    })
+// 计算总页数并创建分页按钮
+  const totalPages = Math.ceil(todoItems.length / itemsPerPage);
+  createPaginationButtons(totalPages);
+  $(`.page-btn[data-page="1"]`).addClass('active-page');
+  // 创建分页按钮
+  function createPaginationButtons(totalPages) {
+    let paginationHtml = '';
+    for (let i = 1; i <= totalPages; i++) {
+      paginationHtml += ` <button class="page-btn" data-page="${i}">${i}</button> `;
+    }
+  
+    $('#pagination').html(paginationHtml);
+  }
+
+});
+    </script>
+</body>
+</html>

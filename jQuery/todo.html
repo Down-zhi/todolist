@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./todo.css" />
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<!-- <script src="./loading.js"></script> -->
+  <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+  <script src="./todo.js"></script>
+ 
+  <title>Todo List</title>
+</head>
+
+<body>
+  <!-- <div id="loading" style="display:none;">加载中...</div> -->
+  <div class="todo-container">
+    <h1>Todolist</h1>
+    <h2>What needs to be done ?</h2>
+    <input type="text" id="todo-input" class="todo-input" placeholder="Add a task" />
+    <br />
+
+    <button id="todo-button" class="todo-button">Add</button>
+    <div class="buts">
+      <button id="reset" class="button">All</button>
+      <button id="active" class="button2">Active</button>
+      <button id="Completed" class="button3">Completed</button>
+    </div>
+    <h2 id="remain"></h2>
+    <ul id="todo-list" class="todo-list">
+    </ul>
+    <div class="paging" style="display: inline;">
+      <button class="pre">< </button>
+      <div style="display: inline;" id="pagination"></div>
+      <button style="display: inline;" class="next">></button>
+  </div>
+  </div>
+
+</body>
+
+</html>
