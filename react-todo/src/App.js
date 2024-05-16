@@ -3,6 +3,7 @@ import{ AddTask} from './AddTask.js';
 import { Filter } from './Filter.js'; 
 import { Remain } from './TasksRemain.js';
 import { Page } from './paging.js';
+import { FilterableList } from './Search.js';
 import { fetchDataFromServer,createTask,deleteTask,updateTask } from './Request.js';//发送请求的组件
 import'./App.css'
 import{TasksContext, TasksDispatchContext} from './TaskContext.js'
@@ -14,18 +15,28 @@ import{TasksContext, TasksDispatchContext} from './TaskContext.js'
 // 3.在组件树的任何地方 使用 context。现在你不需要将 tasks 和事件处理程序在组件树中传递：任何需要 tasks 的组件都可以从 TaskContext 中读取它,TaskApp 组件不会向下传递任何事件处理程序，TaskList 也不会。每个组件都会读取它需要的 context：
 export default function App() {               //主组件
     const [tasks, dispatch] = useReducer(tasksReducer ,[]);
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-      fetchDataFromServer(dispatch);     //服务器请求
+      fetchDataFromServer(dispatch); 
+          setIsLoading(false)           //服务器请求
     }, [dispatch]);
+  
     return (
       <TasksContext.Provider value={tasks}>  {/* 不需要再向子组件传递props，让tasks 的组件都可以从 TaskContext 中读取它： */}
         <TasksDispatchContext.Provider value={dispatch}>
-         <h1> TodoList</h1>
-         <h2>What needs to be done ?</h2>
-         <AddTask />  
-         <Filter /> 
-         <Remain/>
-         <Page/>
+        {isLoading ? (
+                    <div>Loading...</div>
+                ) : (
+                    <>
+                        <h1>TodoList</h1>
+                        <h2>What needs to be done?</h2>
+                        <AddTask />
+                        <Filter />
+                        <Remain />
+                        <FilterableList />
+                        <Page />
+                    </>
+                )}
         </TasksDispatchContext.Provider>
       </TasksContext.Provider>
     );

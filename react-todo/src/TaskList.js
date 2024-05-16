@@ -3,14 +3,7 @@ import { TasksContext, TasksDispatchContext } from './TaskContext.js';
 export function TaskList({tasks=[]}){
     //  const tasks = useContext(TasksContext);
      const dispatch=useContext(TasksDispatchContext)
-    // useEffect(() => {
-    //   fetchDataFromServer(dispatch);    // 在组件加载时获取数据
-    // }, [dispatch]);
-    // const filteredTasks = tasks.filter(task => {
-    //     if (filterStatus === 'active') return task.status === 0;
-    //     if (filterStatus === 'completed') return task.status === 1;
-    //     return true; // 显示所有
-    // });
+
     return( <>
            <ul className='todo-list'>
             {tasks.map(task=>(<li  key={task.id} id={task.id} data-status={task.status} className='todo-li' >
@@ -20,7 +13,7 @@ export function TaskList({tasks=[]}){
     //返回什么 把tasks给遍历到Task中
 }
 
-function Task({task}){
+export function Task({task}){
     const [isEditing, setIsEditing] = useState(false);
     const dispatch = useContext(TasksDispatchContext);
     let taskContent;

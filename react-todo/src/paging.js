@@ -24,10 +24,6 @@ export function Page(){
           setCurrentPage(c=>c-1)
         }
       }
-      function activepage(nowpage){
-    return <button data-page={nowpage} className="active-page"></button>
-      }
-      activepage(1)
     // 计算总页数
     const totalPages = Math.ceil(tasks.length / itemsPerPage);
 

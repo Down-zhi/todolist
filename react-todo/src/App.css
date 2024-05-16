@@ -309,6 +309,35 @@ top: 62px;
   width: 30px;
   
 }
+.search{
+  background-color: #545754;
+  height: 5px;
+}
+.label{
+  position: relative;
+}
+.search-input{
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  margin-left: 240px;
+  width: 200px;
+  height: 20px;
+  text-align: center;
+  
+}
+.search-btn{
+color: black;
+  position: absolute;
+  height: 20px;
+  right: 235px;
+  font-size:20px;
+  top:0px ;
+}
+.search-fail{
+text-align: center;
+font-size: larger;
+}
 /* #cisLoading {
 position: fixed;
 left: 50%;
